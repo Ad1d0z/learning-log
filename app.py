@@ -39,6 +39,16 @@ def create_note():
     conn.close()
     return jsonify(dict(new_note)), 201
 
+@app.route("/api/notes/<int:note_id>")
+def get_note(note_id):
+    conn = sqlite3.connect("learning-log.db")
+    conn.row_factory = sqlite3.Row
+    note = conn.execute("SELECT * FROM notes WHERE id = ?", (note_id,)).fetchone()
+    conn.close()
+    if note is None:
+        return jsonify({"error":"Note not found"}), 404
+    return jsonify(dict(note))
+    
 # Main now uses index
 @app.route("/")
 def default():
