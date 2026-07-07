@@ -5,3 +5,12 @@
 #   3. commits and closes the connection
 #
 # Hints: sqlite3.connect(), open()/read(), connection.executescript()
+import sqlite3
+
+conn = sqlite3.connect("learning-log.db")          # the database filename you chose
+
+with open("schema.sql") as f:                 # the file your CREATE TABLE lives in
+    sql = f.read()
+conn.executescript(sql)                                       # (it was in the hints — starts with "execute")
+conn.commit()
+conn.close()
