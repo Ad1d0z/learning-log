@@ -1,1 +1,4 @@
-/* Milestone 3: your styles go here */
+li {
+    cursor: pointer;
+    width: fit-content;
+}
