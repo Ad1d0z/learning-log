@@ -13,8 +13,29 @@ async function loadNotes() {
         const li = document.createElement("li");
         li.textContent = `${note.title} — ${note.created_at}`;
         list.appendChild(li);
+        li.addEventListener("click",()=>showNote(note.id));
     }
-}
+};
+async function showNote(id){
+    const response = await fetch(`/api/notes/${id}`);
+    const note = await response.json();
+    const detail = document.getElementById("note-detail");
+
+    const heading = document.createElement("h2");
+    heading.textContent = note.title;
+
+    const content = document.createElement("p");
+    content.textContent = note.content;
+
+    const meta = document.createElement("p");
+    meta.textContent = `${note.category} — ${note.created_at}`;
+
+    detail.appendChild(heading);
+    detail.appendChild(content);
+    detail.appendChild(meta);
+
+
+}   
 loadNotes();
 const form = document.getElementById("note-form")
 form.addEventListener("submit",async(event)=>{
