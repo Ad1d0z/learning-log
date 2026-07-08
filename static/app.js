@@ -16,6 +16,17 @@ async function loadNotes() {
         list.appendChild(li);
         li.addEventListener("click",()=>showNote(note.id));
     }
+    
+};
+function showListView() {
+    document.getElementById("list-view").hidden = false;
+    document.getElementById("note-view").hidden = true;
+    currentNoteId = null;
+}
+
+function showNoteView() {
+    document.getElementById("list-view").hidden = true;
+    document.getElementById("note-view").hidden = false;
 };
 async function showNote(id){
     if (id === currentNoteId) return;
@@ -36,6 +47,7 @@ async function showNote(id){
     detail.appendChild(content);
     detail.appendChild(meta);
     currentNoteId = id;
+    showNoteView();
 
 
 }   
@@ -59,4 +71,7 @@ form.addEventListener("submit",async(event)=>{
         const err = await response.json();
         alert(err.error);
     }
+});
+document.getElementById("back-button").addEventListener("click", () => {
+    showListView();
 });
