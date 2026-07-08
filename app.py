@@ -6,18 +6,20 @@ app = Flask(__name__)
 
 # A temporary route just to prove the server works.
 # You'll replace this with your real API routes (see the project brief, section 5).
+def get_db_connection():
+    conn = sqlite3.connect("learning-log.db")
+    conn.row_factory = sqlite3.Row
+    return conn
+
 @app.route("/api/ping")
 def ping():
     return {"message": "pong"}
 
 @app.route("/api/notes")
 def get_notes():
-    conn = sqlite3.connect("learning-log.db")
-    conn.row_factory = sqlite3.Row
-
+    conn = get_db_connection()
     rows = conn.execute("SELECT * FROM notes ORDER BY created_at DESC").fetchall()
     conn.close()
-
     notes = [dict(row) for row in rows]
     return jsonify(notes)
 
@@ -27,8 +29,7 @@ def create_note():
 
     if not data or not data.get("title"):
         return jsonify({"error":"Must include a title"}),400
-    conn = sqlite3.connect("learning-log.db")
-    conn.row_factory = sqlite3.Row
+    conn = get_db_connection()
     cursor = conn.execute(
         "INSERT INTO notes (title,content,category) VALUES (?,?,?)",
         (data["title"],data.get("content"), data.get("category")),
@@ -41,8 +42,7 @@ def create_note():
 
 @app.route("/api/notes/<int:note_id>")
 def get_note(note_id):
-    conn = sqlite3.connect("learning-log.db")
-    conn.row_factory = sqlite3.Row
+    conn = get_db_connection()
     note = conn.execute("SELECT * FROM notes WHERE id = ?", (note_id,)).fetchone()
     conn.close()
     if note is None:
