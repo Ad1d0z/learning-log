@@ -13,6 +13,7 @@ async function loadNotes() {
     }
     for (const note of notes) {
         const li = document.createElement("li");
+        li.classList.add("list-group-item");
         li.textContent = `${note.title} — ${note.created_at}`;
         list.appendChild(li);
         li.addEventListener("click",()=>showNote(note.id));
