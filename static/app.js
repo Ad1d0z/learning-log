@@ -100,7 +100,7 @@ document.getElementById("edit-button").addEventListener("click", async () =>{
     showListView();
 });
 document.addEventListener("keydown", (event) => {
-    if (event.key !== "Backspace") return;
+    if (event.key !== "Backspace" && event.key !== "Escape") return;
     const tag = event.target.tagName;
     if (tag === "INPUT" || tag === "TEXTAREA") return;
     if (!document.getElementById("note-view").hidden) {
