@@ -1,4 +1,5 @@
 // Milestone 3: your fetch() calls and DOM code go here
+let currentNoteId = null;
 async function loadNotes() {
     const response = await fetch("/api/notes");
     const notes = await response.json();
@@ -17,10 +18,11 @@ async function loadNotes() {
     }
 };
 async function showNote(id){
+    if (id === currentNoteId) return;
     const response = await fetch(`/api/notes/${id}`);
     const note = await response.json();
     const detail = document.getElementById("note-detail");
-
+    detail.innerHTML = "";
     const heading = document.createElement("h2");
     heading.textContent = note.title;
 
@@ -33,6 +35,7 @@ async function showNote(id){
     detail.appendChild(heading);
     detail.appendChild(content);
     detail.appendChild(meta);
+    currentNoteId = id;
 
 
 }   
