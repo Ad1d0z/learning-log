@@ -67,6 +67,18 @@ def edit_note(note_id):
     new_note = conn.execute("SELECT * FROM notes WHERE id = ?",(note_id,)).fetchone()
     conn.close()
     return jsonify(dict(new_note))
+
+@app.route("/api/notes/<int:note_id>", methods=["DELETE"])
+def delete_note(note_id):
+    conn = get_db_connection()
+    note = conn.execute("SELECT * FROM notes WHERE id = ?", (note_id,)).fetchone()
+    if note is None:
+         conn.close()
+         return jsonify({"error":"Note not found"}), 404
+    conn.execute("DELETE FROM notes WHERE id = ?", (note_id,))
+    conn.commit()
+    conn.close()
+    return jsonify({"deleted":note_id})
     
 # Main now uses index
 @app.route("/")
