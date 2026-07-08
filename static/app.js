@@ -1,5 +1,6 @@
 // Milestone 3: your fetch() calls and DOM code go here
 let currentNoteId = null;
+let editingNoteId = null;
 async function loadNotes() {
     const response = await fetch("/api/notes");
     const notes = await response.json();
@@ -17,17 +18,16 @@ async function loadNotes() {
         li.addEventListener("click",()=>showNote(note.id));
     }
     
-};
+}
 function showListView() {
     document.getElementById("list-view").hidden = false;
     document.getElementById("note-view").hidden = true;
     currentNoteId = null;
 }
-
 function showNoteView() {
     document.getElementById("list-view").hidden = true;
     document.getElementById("note-view").hidden = false;
-};
+}
 async function showNote(id){
     if (id === currentNoteId) return;
     const response = await fetch(`/api/notes/${id}`);
@@ -55,8 +55,17 @@ loadNotes();
 const form = document.getElementById("note-form")
 form.addEventListener("submit",async(event)=>{
     event.preventDefault();
-    const response = await fetch("/api/notes",{
-        method: "POST",
+    let url;
+    let method;
+    if (editingNoteId === null) {
+        url = "/api/notes";
+        method = "POST";
+    } else {
+        url = `/api/notes/${editingNoteId}`;
+        method = "PUT";
+}
+    const response = await fetch(url, {
+        method: method,
         headers: {"Content-Type": "application/json"},
         body:JSON.stringify({
             title: document.getElementById("title-input").value,
@@ -66,6 +75,7 @@ form.addEventListener("submit",async(event)=>{
     });
     if(response.ok){
         form.reset();
+        editingNoteId = null;
         loadNotes();
     }else{
         const err = await response.json();
@@ -74,4 +84,26 @@ form.addEventListener("submit",async(event)=>{
 });
 document.getElementById("back-button").addEventListener("click", () => {
     showListView();
+});
+document.getElementById("delete-button").addEventListener("click", async () => {
+    if (!confirm("Delete this note?")) return;
+    const response = await fetch(`/api/notes/${currentNoteId}`, {method: "DELETE"});
+    if (response.ok) { loadNotes(); showListView(); };
+});
+document.getElementById("edit-button").addEventListener("click", async () =>{
+    const response = await fetch(`/api/notes/${currentNoteId}`);
+    const note = await response.json();
+    document.getElementById("title-input").value = note.title;
+    document.getElementById("content-input").value = note.content ?? "";
+    document.getElementById("category-input").value = note.category ?? "";
+    editingNoteId = currentNoteId;
+    showListView();
+});
+document.addEventListener("keydown", (event) => {
+    if (event.key !== "Backspace") return;
+    const tag = event.target.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA") return;
+    if (!document.getElementById("note-view").hidden) {
+        showListView();
+    }
 });
