@@ -96,6 +96,7 @@ form.addEventListener("submit", async (event) => {
     if (response.ok) {
         form.reset();
         editingNoteId = null;
+        document.getElementById("submit-button").textContent = "Add note";
         loadNotes();
     } else {
         const err = await response.json();
@@ -117,6 +118,7 @@ document.getElementById("edit-button").addEventListener("click", async () => {
     document.getElementById("content-input").value = note.content ?? "";
     document.getElementById("category-input").value = note.category ?? "";
     editingNoteId = currentNoteId;
+    document.getElementById("submit-button").textContent = "Save changes";
     showListView();
 });
 document.addEventListener("keydown", (event) => {
