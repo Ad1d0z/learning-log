@@ -46,18 +46,26 @@ async function showNote(id) {
     const note = await response.json();
     const detail = document.getElementById("note-detail");
     detail.innerHTML = "";
+    detail.classList.add("card");
+    const body = document.createElement("div");
+    body.classList.add("card-body");
+
     const heading = document.createElement("h2");
+    heading.classList.add("card-title");
     heading.textContent = note.title;
 
     const content = document.createElement("p");
     content.textContent = note.content;
+    content.classList.add("card-text");
 
     const meta = document.createElement("p");
     meta.textContent = `${note.category || "No category"} — ${note.created_at}`;
+    meta.classList.add("card-text");
 
-    detail.appendChild(heading);
-    detail.appendChild(content);
-    detail.appendChild(meta);
+    body.appendChild(heading);
+    body.appendChild(content);
+    body.appendChild(meta);
+    detail.appendChild(body);
     currentNoteId = id;
     showNoteView();
 
