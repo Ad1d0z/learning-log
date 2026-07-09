@@ -1,46 +1,58 @@
-**Welcome to The learning-log
-- The Ultimate Note-Taking Sidekick!**
+# The Learning Log — The Ultimate Note-Taking Sidekick!
 
-Are you tired of scattered notes,
-forgotten ideas, and missed opportunities?
-Do you dream of having a magical notebook
-that helps you stay organized and focused?
+Are you tired of scattered notes, forgotten ideas, and missed opportunities?
+Do you dream of having a magical notebook that helps you stay organized and
+focused?
 
-Well, wish no more! Introducing the The Learning Log that's got
-your back (and your notes).
+Well, wish no more! Introducing The Learning Log — the note-taking app that's
+got your back (and your notes).
 
-**How it works:**
+A small full-stack web app: a **Flask REST API** with a **SQLite** database on
+the back end, and a **vanilla HTML/CSS/JavaScript + Bootstrap** front end that
+talks to it with `fetch()`.
 
-1. **Title**: Give your note a title that
-sums up the awesomeness you're about to
-unleash(required).
-2. **Content**: Share your thoughts,
-ideas, and insights with the world (or not we won't judge).
-3. **Category**: Choose from our curated
-list of categories to help you find what
-you need when you need it.
+## How it works
 
-**But wait, there's more!**
+1. **Title**: give your note a title that sums up the awesomeness you're about
+   to unleash (required).
+2. **Content**: share your thoughts, ideas, and insights with the world (or
+   not — we won't judge).
+3. **Category**: tag your note so you can find what you need when you need it
+   (optional).
 
-* Your notes are saved in a database
-that's created automatically for you, so
-you don't have to worry about losing your
-precious information.
-* You can delete or edit your notes at
-will - no regrets here!
-* Our note-taking magic is easy to use,
-even if you're not tech-savvy.
+Click a note to read it in full, edit it, or delete it — no regrets here.
+Your notes live in a local SQLite database, so they survive restarts.
 
-**So what are you waiting for?**
+## Built with
 
-Download the learning-log today and
-start organizing your thoughts, ideas, and
-learning experiences!
+| Layer     | Tech                                  |
+|-----------|---------------------------------------|
+| Back end  | Flask (Python) REST API               |
+| Database  | SQLite                                |
+| Front end | HTML, CSS, JavaScript, Bootstrap 5    |
 
-**Features:**
+## Running it locally
 
-* Automatic database creation (because who
-likes tedious setup?)
-* Easy note editing and deletion
-* Curated list of categories to help you
-stay on track
+```
+git clone https://github.com/Ad1d0z/learning-log
+cd learning-log
+py -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+py init_db.py        # creates the database (one-time setup)
+py app.py            # starts the server
+```
+
+Then open http://127.0.0.1:5000 and start logging.
+
+## API
+
+| Method | Endpoint          | What it does      |
+|--------|-------------------|-------------------|
+| GET    | `/api/notes`      | List all notes    |
+| GET    | `/api/notes/<id>` | Get one note      |
+| POST   | `/api/notes`      | Create a note     |
+| PUT    | `/api/notes/<id>` | Update a note     |
+| DELETE | `/api/notes/<id>` | Delete a note     |
+
+All requests and responses are JSON. Missing title → `400`. Unknown id → `404`.
