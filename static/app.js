@@ -16,9 +16,20 @@ async function loadNotes() {
         li.classList.add("list-group-item");
         li.textContent = `${note.title} — ${note.created_at}`;
         list.appendChild(li);
-        li.addEventListener("click",()=>showNote(note.id));
+        li.addEventListener("click", () => showNote(note.id));
     }
-    
+    const datalist = document.getElementById("category-options");
+    datalist.innerHTML = "";
+    const categories = new Set();
+    for (const note of notes) {
+        if (note.category) categories.add(note.category);
+    }
+    for (const category of categories) {
+        const option = document.createElement("option");
+        option.value = category;
+        datalist.appendChild(option);
+    }
+
 }
 function showListView() {
     document.getElementById("list-view").hidden = false;
@@ -29,7 +40,7 @@ function showNoteView() {
     document.getElementById("list-view").hidden = true;
     document.getElementById("note-view").hidden = false;
 }
-async function showNote(id){
+async function showNote(id) {
     if (id === currentNoteId) return;
     const response = await fetch(`/api/notes/${id}`);
     const note = await response.json();
@@ -42,7 +53,7 @@ async function showNote(id){
     content.textContent = note.content;
 
     const meta = document.createElement("p");
-    meta.textContent = `${note.category} — ${note.created_at}`;
+    meta.textContent = `${note.category || "No category"} — ${note.created_at}`;
 
     detail.appendChild(heading);
     detail.appendChild(content);
@@ -51,10 +62,10 @@ async function showNote(id){
     showNoteView();
 
 
-}   
+}
 loadNotes();
 const form = document.getElementById("note-form")
-form.addEventListener("submit",async(event)=>{
+form.addEventListener("submit", async (event) => {
     event.preventDefault();
     let url;
     let method;
@@ -64,21 +75,21 @@ form.addEventListener("submit",async(event)=>{
     } else {
         url = `/api/notes/${editingNoteId}`;
         method = "PUT";
-}
+    }
     const response = await fetch(url, {
         method: method,
-        headers: {"Content-Type": "application/json"},
-        body:JSON.stringify({
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
             title: document.getElementById("title-input").value,
-            content:document.getElementById("content-input").value,
-            category:document.getElementById("category-input").value
+            content: document.getElementById("content-input").value,
+            category: document.getElementById("category-input").value
         }),
     });
-    if(response.ok){
+    if (response.ok) {
         form.reset();
         editingNoteId = null;
         loadNotes();
-    }else{
+    } else {
         const err = await response.json();
         alert(err.error);
     }
@@ -88,10 +99,10 @@ document.getElementById("back-button").addEventListener("click", () => {
 });
 document.getElementById("delete-button").addEventListener("click", async () => {
     if (!confirm("Delete this note?")) return;
-    const response = await fetch(`/api/notes/${currentNoteId}`, {method: "DELETE"});
+    const response = await fetch(`/api/notes/${currentNoteId}`, { method: "DELETE" });
     if (response.ok) { loadNotes(); showListView(); };
 });
-document.getElementById("edit-button").addEventListener("click", async () =>{
+document.getElementById("edit-button").addEventListener("click", async () => {
     const response = await fetch(`/api/notes/${currentNoteId}`);
     const note = await response.json();
     document.getElementById("title-input").value = note.title;

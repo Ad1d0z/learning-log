@@ -22,7 +22,9 @@
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text">Category</span>
-            <input type="text" class="form-control" id="category-input" aria-label="Category">
+            <input type="text" class="form-control" id="category-input" aria-label="Category" list="category-options">
+            <datalist id="category-options"></datalist>
+
         </div>
         <button type="submit" class="btn btn-primary mb-3">Add note</button>
     </form>
@@ -37,7 +39,6 @@
     </div>
     <script src="/static/app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <!-- You'll build this out in Milestone 3, one user story at a time -->
     </div>
 </body>
 </html>
