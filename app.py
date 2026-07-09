@@ -3,17 +3,10 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-
-# A temporary route just to prove the server works.
-# You'll replace this with your real API routes (see the project brief, section 5).
 def get_db_connection():
     conn = sqlite3.connect("learning-log.db")
     conn.row_factory = sqlite3.Row
     return conn
-
-@app.route("/api/ping")
-def ping():
-    return {"message": "pong"}
 
 @app.route("/api/notes")
 def get_notes():

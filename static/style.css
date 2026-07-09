@@ -1,4 +1,3 @@
-li {
+#notes-list li {
     cursor: pointer;
-    width: fit-content;
 }
