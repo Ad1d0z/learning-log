@@ -97,6 +97,7 @@ form.addEventListener("submit", async (event) => {
         form.reset();
         editingNoteId = null;
         document.getElementById("submit-button").textContent = "Add note";
+        document.getElementById("cancel-edit-button").hidden = true;
         loadNotes();
     } else {
         const err = await response.json();
@@ -119,7 +120,14 @@ document.getElementById("edit-button").addEventListener("click", async () => {
     document.getElementById("category-input").value = note.category ?? "";
     editingNoteId = currentNoteId;
     document.getElementById("submit-button").textContent = "Save changes";
+    document.getElementById("cancel-edit-button").hidden = false;
     showListView();
+});
+document.getElementById("cancel-edit-button").addEventListener("click", () => {
+    form.reset();
+    editingNoteId = null;
+    document.getElementById("submit-button").textContent = "Add note";
+    document.getElementById("cancel-edit-button").hidden = true;
 });
 document.addEventListener("keydown", (event) => {
     if (event.key !== "Backspace" && event.key !== "Escape") return;
